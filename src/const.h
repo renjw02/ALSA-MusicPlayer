@@ -52,8 +52,12 @@ int periods = 2;
 snd_pcm_uframes_t period_size = 12 * 1024;
 snd_pcm_uframes_t frames;
 snd_pcm_uframes_t buffer_size;
+snd_mixer_t* handle = NULL;
+snd_mixer_elem_t* element_handle = NULL;
+long minVolume,maxVolume;
 
 
+const float _VOLUMECHANGE = 5; 
 
 
 
@@ -62,6 +66,10 @@ unsigned int rate;
 
 // 音乐文件指针变量
 FILE *fp;
+long int filesize;
+int totalSecond;
+int divnum;
+
 
 
 // 函数声明
@@ -74,3 +82,4 @@ long decreaseVolume();
 long getCurrentVolume();
 int setMasterVolume(long volume);
 void open_music_file(const char *path_name);
+void alsaVolumeInit();
