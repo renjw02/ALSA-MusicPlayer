@@ -83,3 +83,4 @@ long getCurrentVolume();
 int setMasterVolume(long volume);
 void open_music_file(const char *path_name);
 void alsaVolumeInit();
+void set_pcm();
