@@ -308,72 +308,72 @@ void open_music_file(const char *path_name){
         exit(1);
     }
 
-	// struct stat statbuff;
-	// if(stat(path_name, &statbuff) < 0){
-	// 	printf("file not exist\n");
-	// }else{
-	// 	filesize = statbuff.st_size;
-	// }
+	struct stat statbuff;
+	if(stat(path_name, &statbuff) < 0){
+		printf("file not exist\n");
+	}else{
+		filesize = statbuff.st_size;
+	}
     
-    // if (err) {
-    //     printf("The file was not opened\n");
-    // }
-    // else {
-    //     fread(&wav,1,sizeof(wav),fp);
-	// 	printf("wavsize:%u\n",(unsigned int)sizeof(wav));
-    //     //fclose(fp);
-    //     char txtn[100];
-    //     int n = 0;
-    //     while(path_name[n] != '\0') {
-    //         n++;
-    //     }
-    //     for(int i=0;i<n-4;i++){
-    //         txtn[i] = path_name[i];
-    //     }
-    //     txtn[n-4] = '.';
-    //     txtn[n-3] = 't';
-    //     txtn[n-2] = 'x';
-    //     txtn[n-1] = 't';
-    //     txtn[n] = '\0';
-    //     wfp = fopen(txtn, "w");
-	// 	printf("%s\n",txtn);
-	// 	if(wfp){
-	// 		printf("wfpasdasd\n");
-	// 	}
-    //     riff = wav.riff;
-    //     fmt = wav.fmt;
-    //     data = wav.data;
-	// 	divnum = fmt.SampleRate*fmt.NumChannels*fmt.BitsPerSample/8;
-	// 	totalSecond = riff.ChunkSize/divnum;
+    if (err) {
+        printf("The file was not opened\n");
+    }
+    else {
+        fread(&wav,1,sizeof(wav),fp);
+		printf("wavsize:%u\n",(unsigned int)sizeof(wav));
+        //fclose(fp);
+        char txtn[100];
+        int n = 0;
+        while(path_name[n] != '\0') {
+            n++;
+        }
+        for(int i=0;i<n-4;i++){
+            txtn[i] = path_name[i];
+        }
+        txtn[n-4] = '.';
+        txtn[n-3] = 't';
+        txtn[n-2] = 'x';
+        txtn[n-1] = 't';
+        txtn[n] = '\0';
+        wfp = fopen(txtn, "w");
+		printf("%s\n",txtn);
+		if(wfp){
+			printf("wfpasdasd\n");
+		}
+        riff = wav.riff;
+        fmt = wav.fmt;
+        data = wav.data;
+		divnum = fmt.SampleRate*fmt.NumChannels*fmt.BitsPerSample/8;
+		totalSecond = riff.ChunkSize/divnum;
  
-    //     //printf("ChunkID \t%c%c%c%c\n", riff.ChunkID[0], riff.ChunkID[1], riff.ChunkID[2], riff.ChunkID[3]);
-    //     fprintf(wfp,"wav文件头结构体大小：\t44\n");
-    //     fprintf(wfp,"RIFF标志： \t%c%c%c%c\n", riff.ChunkID[0], riff.ChunkID[1], riff.ChunkID[2], riff.ChunkID[3]);
-    //     //printf("ChunkSize \t%d\n", riff.ChunkSize);
-    //     fprintf(wfp,"文件大小： \t%d\n", riff.ChunkSize);
-    //     //printf("Format \t\t%c%c%c%c\n", riff.Format[0], riff.Format[1], riff.Format[2], riff.Format[3]);
-    //     fprintf(wfp,"文件格式： \t%c%c%c%c\n", riff.Format[0], riff.Format[1], riff.Format[2], riff.Format[3]);
+        //printf("ChunkID \t%c%c%c%c\n", riff.ChunkID[0], riff.ChunkID[1], riff.ChunkID[2], riff.ChunkID[3]);
+        fprintf(wfp,"wav文件头结构体大小：\t44\n");
+        fprintf(wfp,"RIFF标志： \t%c%c%c%c\n", riff.ChunkID[0], riff.ChunkID[1], riff.ChunkID[2], riff.ChunkID[3]);
+        //printf("ChunkSize \t%d\n", riff.ChunkSize);
+        fprintf(wfp,"文件大小： \t%d\n", riff.ChunkSize);
+        //printf("Format \t\t%c%c%c%c\n", riff.Format[0], riff.Format[1], riff.Format[2], riff.Format[3]);
+        fprintf(wfp,"文件格式： \t%c%c%c%c\n", riff.Format[0], riff.Format[1], riff.Format[2], riff.Format[3]);
  
-    //     //printf("\n");
+        //printf("\n");
  
-    //     //printf("Subchunk1ID \t%c%c%c%c\n", fmt.Subchunk1ID[0], fmt.Subchunk1ID[1], fmt.Subchunk1ID[2], fmt.Subchunk1ID[3]);
-    //     fprintf(wfp,"格式块标识： \t%c%c%c%c\n", fmt.Subchunk1ID[0], fmt.Subchunk1ID[1], fmt.Subchunk1ID[2], fmt.Subchunk1ID[3]);
-    //     //printf("Subchunk1Size \t%d\n", fmt.Subchunk1Size);
-    //     fprintf(wfp,"格式块长度： \t%d\n", fmt.Subchunk1Size);
-    //     //printf("AudioFormat \t%d\n", fmt.AudioFormat);
-    //     fprintf(wfp,"编码格式代码： \t%d\n", fmt.AudioFormat);
-    //     //printf("NumChannels \t%d\n", fmt.NumChannels);
-    //     fprintf(wfp,"声道数： \t%d\n", fmt.NumChannels);
-    //     //printf("SampleRate \t%d\n", fmt.SampleRate);
-    //     fprintf(wfp,"采样频率： \t%d\n", fmt.SampleRate);
-    //     //printf("ByteRate \t%d\n", fmt.ByteRate);
-    //     fprintf(wfp,"传输速率： \t%d\n", fmt.ByteRate);
-    //     //printf("BlockAlign \t%d\n", fmt.BlockAlign);
-    //     fprintf(wfp,"数据块对齐单位： \t%d\n", fmt.BlockAlign);
-    //     //printf("BitsPerSample \t%d\n", fmt.BitsPerSample);
-    //     fprintf(wfp,"采样位数(长度)： \t%d\n", fmt.BitsPerSample);
-	// 	fclose(wfp);
-	// }
+        //printf("Subchunk1ID \t%c%c%c%c\n", fmt.Subchunk1ID[0], fmt.Subchunk1ID[1], fmt.Subchunk1ID[2], fmt.Subchunk1ID[3]);
+        fprintf(wfp,"格式块标识： \t%c%c%c%c\n", fmt.Subchunk1ID[0], fmt.Subchunk1ID[1], fmt.Subchunk1ID[2], fmt.Subchunk1ID[3]);
+        //printf("Subchunk1Size \t%d\n", fmt.Subchunk1Size);
+        fprintf(wfp,"格式块长度： \t%d\n", fmt.Subchunk1Size);
+        //printf("AudioFormat \t%d\n", fmt.AudioFormat);
+        fprintf(wfp,"编码格式代码： \t%d\n", fmt.AudioFormat);
+        //printf("NumChannels \t%d\n", fmt.NumChannels);
+        fprintf(wfp,"声道数： \t%d\n", fmt.NumChannels);
+        //printf("SampleRate \t%d\n", fmt.SampleRate);
+        fprintf(wfp,"采样频率： \t%d\n", fmt.SampleRate);
+        //printf("ByteRate \t%d\n", fmt.ByteRate);
+        fprintf(wfp,"传输速率： \t%d\n", fmt.ByteRate);
+        //printf("BlockAlign \t%d\n", fmt.BlockAlign);
+        fprintf(wfp,"数据块对齐单位： \t%d\n", fmt.BlockAlign);
+        //printf("BitsPerSample \t%d\n", fmt.BitsPerSample);
+        fprintf(wfp,"采样位数(长度)： \t%d\n", fmt.BitsPerSample);
+		fclose(wfp);
+	}
 }
 
 void alsaVolumeInit(){
