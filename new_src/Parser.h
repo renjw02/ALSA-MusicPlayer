@@ -53,18 +53,17 @@ private:
 
     volatile bool isPlaying = false;
 
-    bool haveJumpSignal = false;
+    bool jumpSignal = false;
 
     double jumpTarget = 0.0;
     std::mutex jumpMutex;
     
-    double currentPos = 0.0;
-    std::mutex currentPosMutex;
+    double currentTime = 0.0;
+    std::mutex currentTimeMutex;
 
-    // 播放速度 Part
     double currentTempo = 1.0;
     double targetTempo = 0.0;
-    bool isTempoChanged = false;
+    bool tempoSignal = false;
     std::mutex tempoMutex;
 
     int stream_index = -1;
@@ -87,9 +86,9 @@ public:
 
     void pause();
 
-    double getTime();
+    double getCurrentTime();
 
     double getTotalTime();
 
-    bool changeTempo(double tempo);
+    bool setTempo(double tempo);
 };

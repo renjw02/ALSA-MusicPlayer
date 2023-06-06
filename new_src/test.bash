@@ -1,0 +1,1 @@
+g++ Controller.cpp main.cpp Parser.cpp Player.cpp -o music -lswscale -lswresample -lavformat -lavdevice -lavcodec -lavutil -lavfilter -lpthread -lasound -lstdc++

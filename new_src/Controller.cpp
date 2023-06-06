@@ -1,7 +1,7 @@
 #include "Controller.h"
 
 Controller::Controller() {
-    current_select_index = -1;
+    current_index = -1;
     parser = new Parser();
     player = new Player(2, 44100, SND_PCM_FORMAT_S16_LE);
 
@@ -33,7 +33,7 @@ void Controller::play_worker() {
 
 void Controller::change_song(int index) {
     if(index == -1) {
-        current_select_index = -1;
+        current_index = -1;
         return;
     }
     // Index out of range
@@ -41,24 +41,26 @@ void Controller::change_song(int index) {
         std::cerr << "index out of range" << std::endl;
         return;
     }
-    current_select_index = index;
+    current_index = index;
     parser->pause();
     parser->openFile(song_list[index].c_str());
     parser->play();
 }
 
-void Controller::pause() {
-    parser->pause();
-}
+// void Controller::pause() {
+//     parser->pause();
+// }
 
 void Controller::set_tempo(double tempo) {
+    parser->setTempo(tempo);
 }
 
 void Controller::jump(double jumpTarget) {
+    parser->jump(jumpTarget);
 }
 
 void Controller::play() {
-    if(current_select_index == -1) {
+    if(current_index == -1) {
         std::cerr << "No song selected" << std::endl;
         return;
     }
@@ -66,6 +68,8 @@ void Controller::play() {
 }
 
 void Controller::get_time(double &current_time, double &total_time) {
+    current_time = parser->getCurrentTime();
+    total_time = parser->getTotalTime();
 }
 
 Controller::~Controller() {

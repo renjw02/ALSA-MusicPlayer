@@ -15,7 +15,7 @@ class Controller {
 private:
     // 考虑替换
     std::vector<std::string> song_list;
-    int current_select_index;
+    int current_index;
 
     Parser *parser;
 
@@ -30,17 +30,17 @@ public:
     ~Controller();
     
     inline int get_current_select_index() const { 
-        return current_select_index; 
+        return current_index; 
     }
     inline void set_current_select_index(int index) { 
-        current_select_index = index; 
+        current_index = index; 
     }
-    inline std::string get_current_select_song_name() const { 
-        return current_select_index == -1 ?  "No Song" : song_list[current_select_index]; 
-    }
+    // inline std::string get_current_select_song_name() const { 
+    //     return current_select_index == -1 ?  "No Song" : song_list[current_select_index]; 
+    // }
     inline void delete_list_index(int index) {
-        if(index >= current_select_index) {
-            current_select_index -= 1;
+        if(index >= current_index) {
+            current_index -= 1;
         }
         song_list.erase(song_list.begin() + index);
     }
@@ -49,7 +49,7 @@ public:
         song_list.push_back(song_name);
     }
 
-    void pause();
+    //void pause();
 
     void play();
 
