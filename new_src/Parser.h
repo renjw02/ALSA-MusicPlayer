@@ -1,7 +1,5 @@
 #pragma once
 
-#pragma once
-
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -32,7 +30,6 @@ private:
     AVFrame *frame = nullptr;
     SwrContext *swr_ctx = nullptr;
     FILE *outfile = nullptr;
-    // FILE *fp = nullptr;
 
     // atempo filter
     AVFilterContext* in_ctx = nullptr;
@@ -47,20 +44,22 @@ private:
     int outSampleRate = 44100;  // 重采样后输出的采样率
     enum AVSampleFormat outFormat = AV_SAMPLE_FMT_S16P; // 重采样后输出的格式
 
-    // 是否已经打开文件
+    // 打开文件
     volatile bool isFileOpened = false;
     std::mutex openFileMutex;
 
+    // 播放、暂停
     volatile bool isPlaying = false;
 
+    // 快进快退
     bool jumpSignal = false;
-
     double jumpTarget = 0.0;
     std::mutex jumpMutex;
     
     double currentTime = 0.0;
     std::mutex currentTimeMutex;
 
+    // 倍速
     double currentTempo = 1.0;
     double targetTempo = 0.0;
     bool tempoSignal = false;
@@ -68,9 +67,8 @@ private:
 
     int stream_index = -1;
 
+    错误处理
     char errors[ERROR_STR_SIZE];
-
-    int init_atempo_filter(AVFilterGraph **pGraph, AVFilterContext **src, AVFilterContext **out, const char *value);
 
 public:
     Parser();
@@ -81,14 +79,11 @@ public:
     void parse(std::function<void(void *, size_t)> callback);
 
     bool jump(double jumpTarget);
-
     void play();
-
     void pause();
-
     double getCurrentTime();
-
     double getTotalTime();
-
     bool setTempo(double tempo);
+
+    int init_atempo_filter(AVFilterGraph **pGraph, AVFilterContext **src, AVFilterContext **out, const char *value);
 };

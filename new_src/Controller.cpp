@@ -24,7 +24,7 @@ Controller::Controller() {
 }
 
 void Controller::play_worker() {
-    std::cout << "play_worker: started" << std::endl;
+    std::cout << "handler thread start:" << std::endl;
     parser->parse([&](void *buffer, int outSamplesize) {
         player->play_to_pcm(buffer, outSamplesize);
     });
@@ -47,9 +47,9 @@ void Controller::change_song(int index) {
     parser->play();
 }
 
-// void Controller::pause() {
-//     parser->pause();
-// }
+void Controller::pause() {
+    parser->pause();
+}
 
 void Controller::set_tempo(double tempo) {
     parser->setTempo(tempo);

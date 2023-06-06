@@ -1,11 +1,8 @@
 #pragma once
+
 #include <vector>
 #include <string>
 #include <thread>
-
-extern "C" {
-    #include <stdio.h>
-}
 
 #include "Parser.h"
 #include "Player.h"
@@ -13,12 +10,10 @@ extern "C" {
 class Controller {
 
 private:
-    // 考虑替换
     std::vector<std::string> song_list;
     int current_index;
 
     Parser *parser;
-
     Player *player;
 
     std::thread play_thread;
@@ -50,17 +45,11 @@ public:
     }
 
     //void pause();
-
     void play();
-
     void set_tempo(double tempo);
-
     void jump(double jumpTarget);
-
     void get_time(double &current_time, double &total_time);
-
     void change_song(int index);
-
+    
     void play_worker();
-
 };

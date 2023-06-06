@@ -16,7 +16,6 @@ Parser::~Parser() {
 }
 
 void Parser::openFile(char const file_path[]) {
-
     std::lock_guard<std::mutex> lock(openFileMutex);
     isFileOpened = false;
     std::cerr << "Open file name: " << file_path << std::endl;
