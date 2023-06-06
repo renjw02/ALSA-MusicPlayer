@@ -67,7 +67,6 @@ private:
 
     int stream_index = -1;
 
-    错误处理
     char errors[ERROR_STR_SIZE];
 
 public:

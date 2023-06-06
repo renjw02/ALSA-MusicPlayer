@@ -88,10 +88,10 @@ void Parser::openFile(char const file_path[]) {
 
 int Parser::init_atempo_filter(AVFilterGraph **pGraph, AVFilterContext **src, AVFilterContext **out, const char *value) {
     // 格式化filter init的parameter
-    std::cerr << "start" << std::endl << std::flush;
+    // std::cerr << "start" << std::endl << std::flush;
     std::string sampleRate = std::to_string(codec_ctx->sample_rate);
     std::string sampleFmt = std::string(av_get_sample_fmt_name(codec_ctx->sample_fmt));
-    std::cerr << "asd" << std::endl << std::flush;
+    // std::cerr << "asd" << std::endl << std::flush;
     std::string sampleChannel;
     if (codec_ctx->channels == 1) {
         sampleChannel = "mono";
@@ -104,26 +104,26 @@ int Parser::init_atempo_filter(AVFilterGraph **pGraph, AVFilterContext **src, AV
 
     // init
     AVFilterGraph *graph = avfilter_graph_alloc();
-    if(graph!=NULL)
-    std::cerr << "asd1" << std::endl << std::flush;
+    // if(graph!=NULL)
+    // std::cerr << "asd1" << std::endl << std::flush;
     // accept abuffer for receving input
     AVFilter *abuffer = avfilter_get_by_name("abuffer");
     //avfilter_register(abuffer);
-    if(abuffer!=NULL)
-    std::cerr << "asd2" << std::endl << std::flush;
+    // if(abuffer!=NULL)
+    // std::cerr << "asd2" << std::endl << std::flush;
     AVFilterContext *abuffer_ctx = avfilter_graph_alloc_filter(graph, abuffer, "abuffer");
-    if(abuffer_ctx!=NULL)
-    std::cerr << "asd3" << std::endl << std::flush;
+    // if(abuffer_ctx!=NULL)
+    // std::cerr << "asd3" << std::endl << std::flush;
     // set parameter: 匹配原始音频采样率sample rate，数据格式sample_fmt， channel_layout声道
     if (avfilter_init_str(abuffer_ctx, abufferString.c_str()) < 0) {
         throw std::runtime_error( "error init abuffer filter\n");
     } 
-    std::cerr << "asd" << std::endl << std::flush;
+    // std::cerr << "asd" << std::endl << std::flush;
     // init atempo filter
     AVFilter *atempo = avfilter_get_by_name("atempo");
     //avfilter_register(atempo);
     AVFilterContext *atempo_ctx = avfilter_graph_alloc_filter(graph, atempo, "atempo");
-    std::cerr << "asd" << std::endl << std::flush;
+    // std::cerr << "asd" << std::endl << std::flush;
     // 这里采用av_dict_set设置参数
     AVDictionary *args = NULL;
     av_dict_set(&args, "tempo", value, 0);//这里传入外部参数，可以动态修改
@@ -137,24 +137,24 @@ int Parser::init_atempo_filter(AVFilterGraph **pGraph, AVFilterContext **src, AV
     if (avfilter_init_str(aformat_ctx, aformatString.c_str()) < 0) {
         throw std::runtime_error("error init aformat filter");
     }
-    std::cerr << "asd" << std::endl << std::flush;
+    // std::cerr << "asd" << std::endl << std::flush;
     // 初始化sink用于输出
     AVFilter *sink = avfilter_get_by_name("abuffersink");
-    if(sink==NULL)std::cerr << "asd null" << std::endl << std::flush;
-    std::cerr << "asd" << std::endl << std::flush;
+    // if(sink==NULL)std::cerr << "asd null" << std::endl << std::flush;
+    // std::cerr << "asd" << std::endl << std::flush;
     avfilter_register(sink);
-    std::cerr << "asd" << std::endl << std::flush;
+    // std::cerr << "asd" << std::endl << std::flush;
     AVFilterContext *sink_ctx = avfilter_graph_alloc_filter(graph, sink, "sink");
-    if(sink_ctx==NULL)std::cerr << "asd null" << std::endl << std::flush;
+    // if(sink_ctx==NULL)std::cerr << "asd null" << std::endl << std::flush;
     if (avfilter_init_str(sink_ctx, "") < 0) {//无需参数
         throw std::runtime_error("error init sink filter\n");
     }
-    std::cerr << "asd" << std::endl << std::flush;
+    // std::cerr << "asd" << std::endl << std::flush;
     // 链接各个filter上下文
     if (avfilter_link(abuffer_ctx, 0, atempo_ctx, 0) != 0) {
         throw std::runtime_error("error link to atempo filter\n");
     }
-    std::cerr << "asd" << std::endl << std::flush;
+    // std::cerr << "asd" << std::endl << std::flush;
     if (avfilter_link(atempo_ctx, 0, aformat_ctx, 0) != 0) {
         throw std::runtime_error("error link to aformat filter\n");
     }

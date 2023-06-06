@@ -5,21 +5,6 @@ Controller::Controller() {
     parser = new Parser();
     player = new Player(2, 44100, SND_PCM_FORMAT_S16_LE);
 
-    // FILE *playlist = fopen("playList.txt", "r");
-    // if (playlist == NULL) {
-    //     printf("无法打开歌曲列表文件\n");
-    //     return 1;
-    // }
-    // char song_name[256];
-    // while (fgets(song_name, sizeof(song_name), playlist) != NULL) {
-    //     song_name[strcspn(song_name, "\r")] = '\0';
-    //     song_name[strcspn(song_name, "\n")] = '\0';  // 移除换行符
-    //     strcpy(songList[songCount], song_name);  // 存储歌曲名字到歌曲列表
-    //     songCount++;
-    // }
-    // printf("total song number:%d\n", songCount);
-    // fclose(playlist);
-
     play_thread = std::thread(&Controller::play_worker, this);
 }
 
@@ -30,22 +15,60 @@ void Controller::play_worker() {
     });
 }
 
+void Controller::create_song_list() {
+    std::ifstream playlist("playList.txt");
+    if (!playlist.is_open()) {
+        std::cout << "Cannot open playList.txt" << std::endl;
+        exit(1);
+    }
+
+    std::string song_name;
+    while (std::getline(playlist, song_name)) {
+        // 移除换行符
+        song_name.erase(std::remove(song_name.begin(), song_name.end(), '\r'), song_name.end());
+        song_name.erase(std::remove(song_name.begin(), song_name.end(), '\n'), song_name.end());
+        song_list.push_back(song_name);
+    }
+    // printf("total song number:%d\n", songCount);
+    playlist.close();
+}
+
+void Controller::print_song_list() {
+    std::cout << "********************************" << std::endl;
+    std::cout << "song list: " << std::endl;
+    for (int i = 0; i < song_list.size(); i++) {
+        std::cout << i << ": " << song_list[i] << std::endl;
+    }
+    std::cout << "********************************" << std::endl;
+}
 
 void Controller::change_song(int index) {
-    if(index == -1) {
-        current_index = -1;
-        return;
+    int count =  song_list.size();
+    if (index >= count) {
+        index = 0;
+    } else if (index < 0) {
+        index = song_list.size() - 1;
     }
-    // Index out of range
-    if(index < 0 || index >= song_list.size()) {
-        std::cerr << "index out of range" << std::endl;
-        return;
-    }
+
     current_index = index;
     parser->pause();
     parser->openFile(song_list[index].c_str());
     parser->play();
 }
+
+int Controller::get_index_of_song(const std::string& song_name) {
+    auto iter = std::find(song_list.begin(), song_list.end(), song_name);
+    if (iter != song_list.end()) {
+        std::vector<std::string>::difference_type index = std::distance(song_list.begin(), iter);
+        int intIndex = static_cast<int>(index);
+        return intIndex;
+
+    } else {
+        std::cout << "Song '" << song_name << "' not found in the list." << std::endl;
+        return -1;
+    }
+}
+
 
 void Controller::pause() {
     parser->pause();
